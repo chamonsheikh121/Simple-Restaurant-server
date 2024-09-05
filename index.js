@@ -209,10 +209,20 @@ async function run() {
         })
 
 
-        app.get('/api/v1/reviews',  async (req, res) => {
+        app.get('/api/v1/reviews', async (req, res) => {
             const cursor = await reviewCollection.find().toArray();
             // console.log(cursor);
             res.send(cursor)
+        })
+        app.post('/api/v1/add-review', async (req, res) => {
+            try {
+                const reviewDetails = req?.body;
+                const result = await reviewCollection.insertOne(reviewDetails);
+                res.send(result)
+            }
+            catch (err) {
+                console.log(err);
+            }
         })
         app.post('/api/v1/cartItems', async (req, res) => {
 
