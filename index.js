@@ -46,7 +46,8 @@ async function run() {
 
         app.post('/api/v1/jwt', async (req, res) => {
             const user = req.body;
-            const token = jwt.sign(user, process.env.SECRET_KEY, { expiresIn: '6h' });
+
+            const token = jwt.sign(user, process.env.SECRET_KEY, { expiresIn: '30d' });
             // console.log(token);
             res.send(token)
         })
@@ -61,7 +62,7 @@ async function run() {
                 return res.status(401).send({ message: 'unauthorized user' })
             }
             const token = reqToken.split(' ')[1]
-            // console.log(token);
+            console.log(token);
             jwt.verify(token, process.env.SECRET_KEY, (err, decode) => {
                 if (err) {
                     res.status(401).send({ message: 'unauthorized user' })
@@ -210,7 +211,7 @@ async function run() {
 
 
         app.get('/api/v1/reviews', async (req, res) => {
-            const cursor = await reviewCollection.find().toArray();
+            const cursor = await reviewCollection.find().sort({ _id: -1 }).toArray();
             // console.log(cursor);
             res.send(cursor)
         })
